@@ -211,6 +211,55 @@
           }
         }
       }
+    },
+    "/club": {
+      "get": {
+        "tags": ["Club"],
+        "summary": "Returns a list of clubs",
+        "description": "Route for listing clubs",
+        "operationId": "listClubs",
+        "responses": {
+          "200": {
+            "description": "Clubs list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "format": "uuid"
+                      },
+                      "club": {
+                        "type": "string",
+                        "example": "Vila Velha"
+                      },
+                      "athletes": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "format": "uuid"
+                            },
+                            "name": {
+                              "type": "string",
+                              "example": "Marcus Corrêa de Lima"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
