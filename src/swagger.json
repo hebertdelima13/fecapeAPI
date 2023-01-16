@@ -1,0 +1,311 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Fecape API",
+    "description": "API for the Fecape (Federação capixaba de pesca e lançamento) web system.",
+    "contact": {
+      "email": "hebertdelima13@gmail.com"
+    },
+    "version": "1.0.0"
+  },
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Route for user registration and authentication"
+    },
+    {
+      "name": "User",
+      "description": "Route to list, update and delete users"
+    },
+    {
+      "name": "Club",
+      "description": "Route to list, update and delete clubs"
+    },
+    {
+      "name": "Athlete",
+      "description": "Route to list, update and delete athletes"
+    },
+    {
+      "name": "Championship",
+      "description": "Route to list, update and delete championships"
+    },
+    {
+      "name": "Result",
+      "description": "Route to list, update and delete results"
+    }
+  ],
+  "paths": {
+    "/register": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Registration of a user",
+        "description": "Route for registering a user",
+        "operationId": "createUser",
+        "requestBody": {
+          "description": "Registering a user in the system",
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#components/schemas/RequestRegister" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User created successfully",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#components/schemas/ResponseRegister" }
+              }
+            }
+          },
+          "400": {
+            "description": "E-mail already registered"
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Login of a user",
+        "description": "Route for user login",
+        "operationId": "loginUser",
+        "requestBody": {
+          "description": "Login of a user to the system",
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#components/schemas/RequestLogin" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User logged in successfully",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#components/schemas/ResponseLogin" }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid email or password"
+          }
+        }
+      }
+    },
+    "/user": {
+      "get": {
+        "tags": ["User"],
+        "summary": "Returns a list of users",
+        "description": "Route for listing users",
+        "operationId": "listUser",
+        "responses": {
+          "200": {
+            "description": "User list",
+            "content": {
+              "application/json": {
+                "type": "array",
+                "schema": { "$ref": "#components/schemas/User" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/{userId}": {
+      "get": {
+        "tags": ["User"],
+        "summary": "Returns a user by id",
+        "description": "Route for listing a specific user by id",
+        "operationId": "getUserById",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "User id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#components/schemas/User" }
+              }
+            }
+          },
+          "400": {
+            "description": "No id found!"
+          }
+        }
+      },
+      "put": {
+        "tags": ["User"],
+        "summary": "Update an existing user",
+        "description": "Update an existing user by Id",
+        "operationId": "updatePet",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "User id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Update a user in the system",
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#components/schemas/RequestRegister" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#components/schemas/User" }
+              }
+            }
+          },
+          "400": {
+            "description": "No id found!"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["User"],
+        "summary": "Delete an existing user",
+        "description": "Delete an existing user by Id",
+        "operationId": "deletePet",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "User id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "User deleted successfully"
+          },
+          "400": {
+            "description": "No id found!"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "RequestRegister": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Nome do usuário a ser criado.",
+            "example": "Lorem Ipsum"
+          },
+          "email": {
+            "type": "string",
+            "description": "E-mail do usuário a ser criado.",
+            "example": "loremipsum@gmail.com"
+          },
+          "password": {
+            "type": "string",
+            "description": "Senha do usuário a ser criado.",
+            "example": "loremipsum"
+          }
+        }
+      },
+      "ResponseRegister": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Nome do usuário a ser criado.",
+            "example": "Lorem Ipsum"
+          },
+          "email": {
+            "type": "string",
+            "description": "E-mail do usuário a ser criado.",
+            "example": "loremipsum@gmail.com"
+          },
+          "password": {
+            "type": "string",
+            "description": "Senha do usuário a ser criado.",
+            "example": "loremipsum"
+          },
+          "id": {
+            "type": "string",
+            "description": "Id do usuário",
+            "format": "uuid"
+          }
+        }
+      },
+      "RequestLogin": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "E-mail do usuário a ser criado.",
+            "example": "loremipsum@gmail.com"
+          },
+          "password": {
+            "type": "string",
+            "description": "Senha do usuário a ser criado.",
+            "example": "loremipsum"
+          }
+        }
+      },
+      "ResponseLogin": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "$ref": "#components/schemas/User"
+          },
+          "token": {
+            "type": "string",
+            "description": "Token do usuário logado",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjA2ZTRhZDA4LWYzMzgtNDU3Yy1iMTFmLTI5NGFiOGIyNDIwOSIsImlhdCI6MTY3MzM3Nzc4MiwiZXhwIjoxNjczNDA2NTgyfQ.Tn8szrO4Rgag_vR5kkata1L2TQpWUgkfFJNZPNiwLjc"
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Id do usuário",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "description": "Nome do usuário logado",
+            "example": "Lorem Ipsum"
+          },
+          "email": {
+            "type": "string",
+            "description": "E-mail do usuário logado",
+            "example": "loremipsum@gmail.com"
+          }
+        }
+      }
+    }
+  }
+}
