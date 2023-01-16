@@ -101,11 +101,13 @@
         "operationId": "listUser",
         "responses": {
           "200": {
-            "description": "User list",
+            "description": "Users list",
             "content": {
               "application/json": {
-                "type": "array",
-                "schema": { "$ref": "#components/schemas/User" }
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#components/schemas/User" }
+                }
               }
             }
           }
@@ -218,17 +220,14 @@
         "properties": {
           "name": {
             "type": "string",
-            "description": "Nome do usuário a ser criado.",
             "example": "Lorem Ipsum"
           },
           "email": {
             "type": "string",
-            "description": "E-mail do usuário a ser criado.",
             "example": "loremipsum@gmail.com"
           },
           "password": {
             "type": "string",
-            "description": "Senha do usuário a ser criado.",
             "example": "loremipsum"
           }
         }
@@ -238,22 +237,18 @@
         "properties": {
           "name": {
             "type": "string",
-            "description": "Nome do usuário a ser criado.",
             "example": "Lorem Ipsum"
           },
           "email": {
             "type": "string",
-            "description": "E-mail do usuário a ser criado.",
             "example": "loremipsum@gmail.com"
           },
           "password": {
             "type": "string",
-            "description": "Senha do usuário a ser criado.",
             "example": "loremipsum"
           },
           "id": {
             "type": "string",
-            "description": "Id do usuário",
             "format": "uuid"
           }
         }
@@ -263,12 +258,10 @@
         "properties": {
           "email": {
             "type": "string",
-            "description": "E-mail do usuário a ser criado.",
             "example": "loremipsum@gmail.com"
           },
           "password": {
             "type": "string",
-            "description": "Senha do usuário a ser criado.",
             "example": "loremipsum"
           }
         }
@@ -281,7 +274,6 @@
           },
           "token": {
             "type": "string",
-            "description": "Token do usuário logado",
             "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjA2ZTRhZDA4LWYzMzgtNDU3Yy1iMTFmLTI5NGFiOGIyNDIwOSIsImlhdCI6MTY3MzM3Nzc4MiwiZXhwIjoxNjczNDA2NTgyfQ.Tn8szrO4Rgag_vR5kkata1L2TQpWUgkfFJNZPNiwLjc"
           }
         }
@@ -291,18 +283,53 @@
         "properties": {
           "id": {
             "type": "string",
-            "description": "Id do usuário",
             "format": "uuid"
           },
           "name": {
             "type": "string",
-            "description": "Nome do usuário logado",
             "example": "Lorem Ipsum"
           },
           "email": {
             "type": "string",
-            "description": "E-mail do usuário logado",
             "example": "loremipsum@gmail.com"
+          }
+        }
+      },
+      "Club": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "example": "Vila Velha"
+          },
+          "athletes": {
+            "type": "array",
+            "items": { "$ref": "#components/schemas/Athlete" }
+          }
+        }
+      },
+      "Athlete": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "example": "Marcus Corrêa de Lima"
+          },
+          "club": {
+            "type": "string",
+            "example": "Vila Velha"
+          },
+          "results": {
+            "type": "array",
+            "items": { "$ref": "#components/schemas/Result" }
           }
         }
       }
