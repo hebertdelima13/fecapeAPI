@@ -51,7 +51,7 @@
         },
         "responses": {
           "200": {
-            "description": "User created successfully",
+            "description": "Successful operation!",
             "content": {
               "application/json": {
                 "schema": { "$ref": "#components/schemas/ResponseRegister" }
@@ -59,7 +59,7 @@
             }
           },
           "400": {
-            "description": "E-mail already registered"
+            "description": "Error!"
           }
         }
       }
@@ -80,7 +80,7 @@
         },
         "responses": {
           "200": {
-            "description": "User logged in successfully",
+            "description": "Successful operation!",
             "content": {
               "application/json": {
                 "schema": { "$ref": "#components/schemas/ResponseLogin" }
@@ -88,7 +88,7 @@
             }
           },
           "400": {
-            "description": "Invalid email or password"
+            "description": "Error!"
           }
         }
       }
@@ -134,7 +134,7 @@
         ],
         "responses": {
           "200": {
-            "description": "User",
+            "description": "Successful operation!",
             "content": {
               "application/json": {
                 "schema": { "$ref": "#components/schemas/User" }
@@ -142,7 +142,7 @@
             }
           },
           "400": {
-            "description": "No id found!"
+            "description": "Error!"
           }
         }
       },
@@ -150,7 +150,7 @@
         "tags": ["User"],
         "summary": "Update an existing user",
         "description": "Update an existing user by Id",
-        "operationId": "updatePet",
+        "operationId": "updateUser",
         "parameters": [
           {
             "name": "userId",
@@ -173,7 +173,7 @@
         },
         "responses": {
           "201": {
-            "description": "User",
+            "description": "Successful operation!",
             "content": {
               "application/json": {
                 "schema": { "$ref": "#components/schemas/User" }
@@ -181,7 +181,7 @@
             }
           },
           "400": {
-            "description": "No id found!"
+            "description": "Error!"
           }
         }
       },
@@ -189,7 +189,7 @@
         "tags": ["User"],
         "summary": "Delete an existing user",
         "description": "Delete an existing user by Id",
-        "operationId": "deletePet",
+        "operationId": "deleteUser",
         "parameters": [
           {
             "name": "userId",
@@ -204,10 +204,10 @@
         ],
         "responses": {
           "204": {
-            "description": "User deleted successfully"
+            "description": "Successful operation!"
           },
           "400": {
-            "description": "No id found!"
+            "description": "Error!"
           }
         }
       }
@@ -220,7 +220,7 @@
         "operationId": "listClubs",
         "responses": {
           "200": {
-            "description": "Clubs list",
+            "description": "Successful operation",
             "content": {
               "application/json": {
                 "schema": {
@@ -257,6 +257,138 @@
                 }
               }
             }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Club"]
+      }
+    },
+    "/club/{clubId}": {
+      "get": {
+        "tags": ["Club"],
+        "summary": "Returns a club by id",
+        "description": "Route for listing a specific club by id",
+        "operationId": "getClubById",
+        "parameters": [
+          {
+            "name": "clubId",
+            "in": "path",
+            "description": "Club id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "format": "uuid"
+                      },
+                      "club": {
+                        "type": "string",
+                        "example": "Vila Velha"
+                      },
+                      "athletes": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "format": "uuid"
+                            },
+                            "name": {
+                              "type": "string",
+                              "example": "Marcus Corrêa de Lima"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error!"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Club"],
+        "summary": "Update an existing club",
+        "description": "Update an existing club by Id",
+        "operationId": "updateClub",
+        "parameters": [
+          {
+            "name": "clubId",
+            "in": "path",
+            "description": "Club id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Update a club in the system",
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#components/schemas/RequestClub" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation!",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#components/schemas/ResponseClub" }
+              }
+            }
+          },
+          "400": {
+            "description": "Error!"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Club"],
+        "summary": "Delete an existing club",
+        "description": "Delete an existing club by Id",
+        "operationId": "deleteClub",
+        "parameters": [
+          {
+            "name": "clubId",
+            "in": "path",
+            "description": "Club id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful operation!"
+          },
+          "400": {
+            "description": "Error!"
           }
         }
       }
@@ -358,6 +490,28 @@
           "athletes": {
             "type": "array",
             "items": { "$ref": "#components/schemas/Athlete" }
+          }
+        }
+      },
+      "RequestClub": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Vitória"
+          }
+        }
+      },
+      "ResponseClub": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "example": "Vitória ES"
           }
         }
       },
