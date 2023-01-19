@@ -24,7 +24,7 @@ routes.delete("/user/:idUser", new UserController().deleteUser);
 
 routes.get("/championship", new ChampionshipController().listChampionship);
 routes.get(
-  "/prova/:idProva",
+  "/championship/:idChampionship",
   new ChampionshipController().findByIdChampionship
 );
 routes.post("/championship", new ChampionshipController().createChampionship);
@@ -41,18 +41,9 @@ routes.delete(
 
 routes.get("/result", new ResultController().ListResults);
 routes.get("/result/:idResult", new ResultController().findByIdResult);
-routes.post(
-  "/championship/:idChampionship/result",
-  new ResultController().createResult
-);
-routes.put(
-  "/championship/:idChampionship/result/:idResult",
-  new ResultController().updateResultado
-);
-routes.delete(
-  "/championship/:idChampionship/result/:idResult",
-  new ResultController().deleteResult
-);
+routes.post("/result", new ResultController().createResult);
+routes.put("/result/:idResult", new ResultController().updateResultado);
+routes.delete("/result/:idResult", new ResultController().deleteResult);
 
 /*Clube */
 
@@ -66,11 +57,8 @@ routes.delete("/club/:idClub", new ClubController().deleteclub);
 
 routes.get("/athlete", new AthleteController().listAthletes);
 routes.get("/athlete/:idAthlete", new AthleteController().findByIdAthlete);
-routes.post("/club/:idClub/Athlete", new AthleteController().createAthlete);
-routes.put("/club/athlete/:idAthlete", new AthleteController().updateAthlete);
-routes.delete(
-  "/club/athlete/:idAthlete",
-  new AthleteController().deleteAthlete
-);
+routes.post("/athlete", new AthleteController().createAthlete);
+routes.put("/athlete/:idAthlete", new AthleteController().updateAthlete);
+routes.delete("/athlete/:idAthlete", new AthleteController().deleteAthlete);
 
 export default routes;
