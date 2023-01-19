@@ -37,7 +37,7 @@ export class ResultController {
       board,
       sort,
       scores,
-      athlete,
+      idAthlete,
       quantity,
       totalWeight,
       greaterWeight,
@@ -66,8 +66,12 @@ export class ResultController {
       throw new BadRequestError("Escolha se o atleta pontua ou não!");
     }
 
+    const athlete = await athleteRepository.findOneBy({
+      id: idAthlete,
+    });
+
     if (!athlete) {
-      throw new BadRequestError("Digite o atleta!");
+      throw new BadRequestError("Nenhuma prova encontrada!");
     }
 
     if (!quantity) {
@@ -113,7 +117,7 @@ export class ResultController {
       board,
       sort,
       scores,
-      athlete,
+      idAthlete,
       quantity,
       totalWeight,
       greaterWeight,
@@ -150,8 +154,12 @@ export class ResultController {
       throw new BadRequestError("Escolha se o atleta pontua ou não!");
     }
 
+    const athlete = await athleteRepository.findOneBy({
+      id: idAthlete,
+    });
+
     if (!athlete) {
-      throw new BadRequestError("Digite o atleta!");
+      throw new BadRequestError("Nenhuma prova encontrada!");
     }
 
     if (!quantity) {
@@ -185,6 +193,7 @@ export class ResultController {
       greaterWeight,
       lostPoints,
       points,
+      championship,
     };
 
     await resultRepository.save(updateResult);
