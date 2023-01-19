@@ -42,14 +42,14 @@ export class AthleteController {
   }
 
   async createAthlete(req: Request, res: Response) {
-    const { name } = req.body;
-    const { idClub } = req.params;
+    const { name, club } = req.body;
+    // const { idClub } = req.params;
 
-    const club = await clubRepository.findOneBy({
-      id: idClub,
+    const clubFind = await clubRepository.findOneBy({
+      id: club,
     });
 
-    if (!club) {
+    if (!clubFind) {
       throw new BadRequestError("Nenhum clube encontrado!");
     }
 
