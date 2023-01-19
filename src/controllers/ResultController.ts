@@ -33,6 +33,7 @@ export class ResultController {
 
   async createResult(req: Request, res: Response) {
     const {
+      idChampionship,
       board,
       sort,
       scores,
@@ -43,7 +44,7 @@ export class ResultController {
       lostPoints,
     } = req.body;
 
-    const { idChampionship } = req.params;
+    // const { idChampionship } = req.params;
 
     const championship = await championshipRepository.findOneBy({
       id: idChampionship,
@@ -108,6 +109,7 @@ export class ResultController {
 
   async updateResultado(req: Request, res: Response) {
     const {
+      idChampionship,
       board,
       sort,
       scores,
@@ -118,7 +120,7 @@ export class ResultController {
       lostPoints,
     } = req.body;
 
-    const { idChampionship, idResult } = req.params;
+    const { idResult } = req.params;
 
     const championship = await championshipRepository.findOneBy({
       id: idChampionship,
