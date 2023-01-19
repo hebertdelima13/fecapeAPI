@@ -19,19 +19,19 @@
     },
     {
       "name": "Club",
-      "description": "Route to list, update and delete clubs"
+      "description": "Route to list, create, update and delete clubs"
     },
     {
       "name": "Athlete",
-      "description": "Route to list, update and delete athletes"
+      "description": "Route to list, create, update and delete athletes"
     },
     {
       "name": "Championship",
-      "description": "Route to list, update and delete championships"
+      "description": "Route to list, create, update and delete championships"
     },
     {
       "name": "Result",
-      "description": "Route to list, update and delete results"
+      "description": "Route to list, create, update and delete results"
     }
   ],
   "paths": {
@@ -114,7 +114,7 @@
         }
       }
     },
-    "/user/{userId}": {
+    "/user/{idUser}": {
       "get": {
         "tags": ["User"],
         "summary": "Returns a user by id",
@@ -122,7 +122,7 @@
         "operationId": "getUserById",
         "parameters": [
           {
-            "name": "userId",
+            "name": "idUser",
             "in": "path",
             "description": "User id",
             "required": true,
@@ -153,7 +153,7 @@
         "operationId": "updateUser",
         "parameters": [
           {
-            "name": "userId",
+            "name": "idUser",
             "in": "path",
             "description": "User id",
             "required": true,
@@ -192,7 +192,7 @@
         "operationId": "deleteUser",
         "parameters": [
           {
-            "name": "userId",
+            "name": "idUser",
             "in": "path",
             "description": "User id",
             "required": true,
@@ -261,10 +261,54 @@
         }
       },
       "post": {
-        "tags": ["Club"]
+        "tags": ["Club"],
+        "summary": "Create a new club",
+        "description": "Route for create a new club",
+        "operationId": "createClub",
+        "requestBody": {
+          "description": "Create a new club in the system",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Vila Velha"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "club": {
+                      "type": "string",
+                      "example": "Vila Velha"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error!"
+          }
+        }
       }
     },
-    "/club/{clubId}": {
+    "/club/{idClub}": {
       "get": {
         "tags": ["Club"],
         "summary": "Returns a club by id",
@@ -272,7 +316,7 @@
         "operationId": "getClubById",
         "parameters": [
           {
-            "name": "clubId",
+            "name": "idClub",
             "in": "path",
             "description": "Club id",
             "required": true,
@@ -334,7 +378,7 @@
         "operationId": "updateClub",
         "parameters": [
           {
-            "name": "clubId",
+            "name": "idClub",
             "in": "path",
             "description": "Club id",
             "required": true,
@@ -348,7 +392,15 @@
           "description": "Update a club in the system",
           "content": {
             "application/json": {
-              "schema": { "$ref": "#components/schemas/RequestClub" }
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Vitória - ES"
+                  }
+                }
+              }
             }
           }
         },
@@ -357,7 +409,22 @@
             "description": "Successful operation!",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#components/schemas/ResponseClub" }
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "format": "uuid"
+                      },
+                      "club": {
+                        "type": "string",
+                        "example": "Vitória - ES"
+                      }
+                    }
+                  }
+                }
               }
             }
           },
@@ -373,9 +440,1372 @@
         "operationId": "deleteClub",
         "parameters": [
           {
-            "name": "clubId",
+            "name": "idClub",
             "in": "path",
             "description": "Club id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful operation!"
+          },
+          "400": {
+            "description": "Error!"
+          }
+        }
+      }
+    },
+    "/athlete": {
+      "get": {
+        "tags": ["Athlete"],
+        "summary": "Returns a list of athletes",
+        "description": "Route for listing athletes",
+        "operationId": "listAthletes",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "format": "uuid"
+                      },
+                      "name": {
+                        "type": "string",
+                        "example": "Marcus Corrêa de Lima"
+                      },
+                      "club": {
+                        "type": "string",
+                        "format": "uuid"
+                      },
+                      "results": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "format": "uuid"
+                            },
+                            "board": {
+                              "type": "number",
+                              "example": "2"
+                            },
+                            "sort": {
+                              "type": "number",
+                              "example": "1"
+                            },
+                            "scores": {
+                              "type": "boolean",
+                              "example": "true"
+                            },
+                            "quantity": {
+                              "type": "number",
+                              "example": "30"
+                            },
+                            "totalWeight": {
+                              "type": "number",
+                              "example": "451"
+                            },
+                            "greaterWeight": {
+                              "type": "number",
+                              "example": "100"
+                            },
+                            "points": {
+                              "type": "number",
+                              "example": "65"
+                            },
+                            "lostPoints": {
+                              "type": "number",
+                              "example": "0"
+                            },
+                            "championship": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string",
+                                  "format": "uuid"
+                                },
+                                "name": {
+                                  "type": "string",
+                                  "example": "1ª Taça de Vila Velha"
+                                },
+                                "registered": {
+                                  "type": "number",
+                                  "example": "10"
+                                },
+                                "typeOfChamp": {
+                                  "type": "string",
+                                  "example": "Pesca"
+                                },
+                                "category": {
+                                  "type": "string",
+                                  "example": "Masculino"
+                                },
+                                "stage": {
+                                  "type": "string",
+                                  "example": "1ª etapa"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Athlete"],
+        "summary": "Create a new athlete",
+        "description": "Route for create a new athlete",
+        "operationId": "createAthlete",
+        "requestBody": {
+          "description": "Create a new athlete in the system",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "club": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "name": {
+                    "type": "string",
+                    "example": "Marcus Corrêa de Lima"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "club": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "Marcus Corrêa de Lima"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error!"
+          }
+        }
+      }
+    },
+    "/athlete/{idAthlete}": {
+      "get": {
+        "tags": ["Athlete"],
+        "summary": "Returns a athlete by id",
+        "description": "Route for listing a specific athlete by id",
+        "operationId": "getAthleteById",
+        "parameters": [
+          {
+            "name": "idAthlete",
+            "in": "path",
+            "description": "Athlete id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "format": "uuid"
+                      },
+                      "name": {
+                        "type": "string",
+                        "example": "Marcus Corrêa de Lima"
+                      },
+                      "club": {
+                        "type": "string",
+                        "format": "uuid"
+                      },
+                      "results": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "format": "uuid"
+                            },
+                            "board": {
+                              "type": "number",
+                              "example": "2"
+                            },
+                            "sort": {
+                              "type": "number",
+                              "example": "1"
+                            },
+                            "scores": {
+                              "type": "boolean",
+                              "example": "true"
+                            },
+                            "quantity": {
+                              "type": "number",
+                              "example": "30"
+                            },
+                            "totalWeight": {
+                              "type": "number",
+                              "example": "451"
+                            },
+                            "greaterWeight": {
+                              "type": "number",
+                              "example": "100"
+                            },
+                            "points": {
+                              "type": "number",
+                              "example": "65"
+                            },
+                            "lostPoints": {
+                              "type": "number",
+                              "example": "0"
+                            },
+                            "championship": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string",
+                                  "format": "uuid"
+                                },
+                                "name": {
+                                  "type": "string",
+                                  "example": "1ª Taça de Vila Velha"
+                                },
+                                "registered": {
+                                  "type": "number",
+                                  "example": "10"
+                                },
+                                "typeOfChamp": {
+                                  "type": "string",
+                                  "example": "Pesca"
+                                },
+                                "category": {
+                                  "type": "string",
+                                  "example": "Masculino"
+                                },
+                                "stage": {
+                                  "type": "string",
+                                  "example": "1ª etapa"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error!"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Athlete"],
+        "summary": "Update an existing athlete",
+        "description": "Update an existing athlete by Id",
+        "operationId": "updateAthlete",
+        "parameters": [
+          {
+            "name": "idAthlete",
+            "in": "path",
+            "description": "Athlete id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Update a athlete in the system",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "club": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "name": {
+                    "type": "string",
+                    "example": "Marcus Corrêa"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "club": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "Marcus Corrêa"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error!"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Athlete"],
+        "summary": "Delete an existing athlete",
+        "description": "Delete an existing athlete by Id",
+        "operationId": "deleteAthlete",
+        "parameters": [
+          {
+            "name": "idAthlete",
+            "in": "path",
+            "description": "Athlete id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful operation!"
+          },
+          "400": {
+            "description": "Error!"
+          }
+        }
+      }
+    },
+    "/championship": {
+      "get": {
+        "tags": ["Championship"],
+        "summary": "Returns a list of championships",
+        "description": "Route for listing championships",
+        "operationId": "listChampionships",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "format": "uuid"
+                      },
+                      "name": {
+                        "type": "string",
+                        "example": "1ª Taça de Vila Velha"
+                      },
+                      "registered": {
+                        "type": "number",
+                        "example": "10"
+                      },
+                      "typeOfChamp": {
+                        "type": "string",
+                        "example": "Pesca"
+                      },
+                      "category": {
+                        "type": "string",
+                        "example": "Masculino"
+                      },
+                      "stage": {
+                        "type": "string",
+                        "example": "1ª Etapa"
+                      },
+                      "results": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "format": "uuid"
+                            },
+                            "board": {
+                              "type": "number",
+                              "example": "2"
+                            },
+                            "sort": {
+                              "type": "number",
+                              "example": "1"
+                            },
+                            "scores": {
+                              "type": "boolean",
+                              "example": "true"
+                            },
+                            "quantity": {
+                              "type": "number",
+                              "example": "30"
+                            },
+                            "totalWeight": {
+                              "type": "number",
+                              "example": "451"
+                            },
+                            "greaterWeight": {
+                              "type": "number",
+                              "example": "100"
+                            },
+                            "points": {
+                              "type": "number",
+                              "example": "65"
+                            },
+                            "lostPoints": {
+                              "type": "number",
+                              "example": "0"
+                            },
+                            "athletes": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string",
+                                  "format": "uuid"
+                                },
+                                "name": {
+                                  "type": "string",
+                                  "example": "Marcus Corrêa de Lima"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Championship"],
+        "summary": "Create a new championship",
+        "description": "Route for create a new championship",
+        "operationId": "createChampionship",
+        "requestBody": {
+          "description": "Create a new championship in the system",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "1ª Taça de Vila Velha"
+                  },
+                  "registered": {
+                    "type": "number",
+                    "example": "10"
+                  },
+                  "typeOfChamp": {
+                    "type": "string",
+                    "example": "Pesca"
+                  },
+                  "category": {
+                    "type": "string",
+                    "example": "Masculino"
+                  },
+                  "stage": {
+                    "type": "string",
+                    "example": "1ª Etapa"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "1ª Taça de Vila Velha"
+                    },
+                    "registered": {
+                      "type": "number",
+                      "example": "10"
+                    },
+                    "typeOfChamp": {
+                      "type": "string",
+                      "example": "Pesca"
+                    },
+                    "category": {
+                      "type": "string",
+                      "example": "Masculino"
+                    },
+                    "stage": {
+                      "type": "string",
+                      "example": "1ª Etapa"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error!"
+          }
+        }
+      }
+    },
+    "/championship/{idChampionship}": {
+      "get": {
+        "tags": ["Championship"],
+        "summary": "Returns a championship by id",
+        "description": "Route for listing a specific championship by id",
+        "operationId": "getChampionshipById",
+        "parameters": [
+          {
+            "name": "idChampionship",
+            "in": "path",
+            "description": "Championship id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "format": "uuid"
+                      },
+                      "name": {
+                        "type": "string",
+                        "example": "1ª Taça de Vila Velha"
+                      },
+                      "registered": {
+                        "type": "number",
+                        "example": "10"
+                      },
+                      "typeOfChamp": {
+                        "type": "string",
+                        "example": "Pesca"
+                      },
+                      "category": {
+                        "type": "string",
+                        "example": "Masculino"
+                      },
+                      "stage": {
+                        "type": "string",
+                        "example": "1ª Etapa"
+                      },
+                      "results": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "format": "uuid"
+                            },
+                            "board": {
+                              "type": "number",
+                              "example": "2"
+                            },
+                            "sort": {
+                              "type": "number",
+                              "example": "1"
+                            },
+                            "scores": {
+                              "type": "boolean",
+                              "example": "true"
+                            },
+                            "quantity": {
+                              "type": "number",
+                              "example": "30"
+                            },
+                            "totalWeight": {
+                              "type": "number",
+                              "example": "451"
+                            },
+                            "greaterWeight": {
+                              "type": "number",
+                              "example": "100"
+                            },
+                            "points": {
+                              "type": "number",
+                              "example": "65"
+                            },
+                            "lostPoints": {
+                              "type": "number",
+                              "example": "0"
+                            },
+                            "athletes": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string",
+                                  "format": "uuid"
+                                },
+                                "name": {
+                                  "type": "string",
+                                  "example": "Marcus Corrêa de Lima"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error!"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Championship"],
+        "summary": "Update an existing championship",
+        "description": "Update an existing championship by Id",
+        "operationId": "updateChampionship",
+        "parameters": [
+          {
+            "name": "idChampionship",
+            "in": "path",
+            "description": "Championship id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Update a championship in the system",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "2ª Taça de Vila Velha"
+                  },
+                  "registered": {
+                    "type": "number",
+                    "example": "10"
+                  },
+                  "typeOfChamp": {
+                    "type": "string",
+                    "example": "Arremesso"
+                  },
+                  "category": {
+                    "type": "string",
+                    "example": "Masculino"
+                  },
+                  "stage": {
+                    "type": "string",
+                    "example": "1ª Etapa"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "example": "2ª Taça de Vila Velha"
+                    },
+                    "registered": {
+                      "type": "number",
+                      "example": "10"
+                    },
+                    "typeOfChamp": {
+                      "type": "string",
+                      "example": "Arremesso"
+                    },
+                    "category": {
+                      "type": "string",
+                      "example": "Masculino"
+                    },
+                    "stage": {
+                      "type": "string",
+                      "example": "1ª Etapa"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error!"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Championship"],
+        "summary": "Delete an existing championship",
+        "description": "Delete an existing championship by Id",
+        "operationId": "deleteChampionship",
+        "parameters": [
+          {
+            "name": "idChampionship",
+            "in": "path",
+            "description": "Championship id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful operation!"
+          },
+          "400": {
+            "description": "Error!"
+          }
+        }
+      }
+    },
+    "/result": {
+      "get": {
+        "tags": ["Result"],
+        "summary": "Returns a list of results",
+        "description": "Route for listing results",
+        "operationId": "listResults",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "format": "uuid"
+                      },
+                      "board": {
+                        "type": "number",
+                        "example": "2"
+                      },
+                      "sort": {
+                        "type": "number",
+                        "example": "1"
+                      },
+                      "scores": {
+                        "type": "boolean",
+                        "example": "true"
+                      },
+                      "quantity": {
+                        "type": "number",
+                        "example": "30"
+                      },
+                      "totalWeight": {
+                        "type": "number",
+                        "example": "451"
+                      },
+                      "greaterWeight": {
+                        "type": "number",
+                        "example": "100"
+                      },
+                      "points": {
+                        "type": "number",
+                        "example": "65"
+                      },
+                      "lostPoints": {
+                        "type": "number",
+                        "example": "0"
+                      },
+                      "championship": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "format": "uuid"
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "1ª Taça de Vila Velha"
+                          },
+                          "registered": {
+                            "type": "number",
+                            "example": "10"
+                          },
+                          "typeOfChamp": {
+                            "type": "string",
+                            "example": "Pesca"
+                          },
+                          "category": {
+                            "type": "string",
+                            "example": "Masculino"
+                          },
+                          "stage": {
+                            "type": "string",
+                            "example": "1ª Etapa"
+                          }
+                        }
+                      },
+                      "athlete": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "format": "uuid"
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "Marcus Corrêa de Lima"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Result"],
+        "summary": "Create a new result",
+        "description": "Route for create a new result",
+        "operationId": "createResult",
+        "requestBody": {
+          "description": "Create a new result in the system",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "board": {
+                    "type": "number",
+                    "example": "2"
+                  },
+                  "sort": {
+                    "type": "number",
+                    "example": "1"
+                  },
+                  "scores": {
+                    "type": "boolean",
+                    "example": "true"
+                  },
+                  "idAthlete": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "quantity": {
+                    "type": "number",
+                    "example": "30"
+                  },
+                  "totalWeight": {
+                    "type": "number",
+                    "example": "451"
+                  },
+                  "greaterWeight": {
+                    "type": "number",
+                    "example": "100"
+                  },
+                  "lostPoints": {
+                    "type": "number",
+                    "example": "1"
+                  },
+                  "idChampionship": {
+                    "type": "string",
+                    "format": "uuid"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "board": {
+                      "type": "number",
+                      "example": "2"
+                    },
+                    "sort": {
+                      "type": "number",
+                      "example": "1"
+                    },
+                    "scores": {
+                      "type": "boolean",
+                      "example": "true"
+                    },
+                    "quantity": {
+                      "type": "number",
+                      "example": "30"
+                    },
+                    "totalWeight": {
+                      "type": "number",
+                      "example": "451"
+                    },
+                    "greaterWeight": {
+                      "type": "number",
+                      "example": "100"
+                    },
+                    "points": {
+                      "type": "number",
+                      "example": "65"
+                    },
+                    "lostPoints": {
+                      "type": "number",
+                      "example": "0"
+                    },
+                    "championship": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "format": "uuid"
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "1ª Taça de Vila Velha"
+                        },
+                        "registered": {
+                          "type": "number",
+                          "example": "10"
+                        },
+                        "typeOfChamp": {
+                          "type": "string",
+                          "example": "Pesca"
+                        },
+                        "category": {
+                          "type": "string",
+                          "example": "Masculino"
+                        },
+                        "stage": {
+                          "type": "string",
+                          "example": "1ª Etapa"
+                        }
+                      }
+                    },
+                    "athlete": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "format": "uuid"
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "Marcus Corrêa de Lima"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error!"
+          }
+        }
+      }
+    },
+    "/result/{idResult}": {
+      "get": {
+        "tags": ["Result"],
+        "summary": "Returns a result by id",
+        "description": "Route for listing a specific result by id",
+        "operationId": "getResultById",
+        "parameters": [
+          {
+            "name": "idResult",
+            "in": "path",
+            "description": "Result id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "format": "uuid"
+                      },
+                      "board": {
+                        "type": "number",
+                        "example": "2"
+                      },
+                      "sort": {
+                        "type": "number",
+                        "example": "1"
+                      },
+                      "scores": {
+                        "type": "boolean",
+                        "example": "true"
+                      },
+                      "quantity": {
+                        "type": "number",
+                        "example": "30"
+                      },
+                      "totalWeight": {
+                        "type": "number",
+                        "example": "451"
+                      },
+                      "greaterWeight": {
+                        "type": "number",
+                        "example": "100"
+                      },
+                      "points": {
+                        "type": "number",
+                        "example": "65"
+                      },
+                      "lostPoints": {
+                        "type": "number",
+                        "example": "0"
+                      },
+                      "championship": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "format": "uuid"
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "1ª Taça de Vila Velha"
+                          },
+                          "registered": {
+                            "type": "number",
+                            "example": "10"
+                          },
+                          "typeOfChamp": {
+                            "type": "string",
+                            "example": "Pesca"
+                          },
+                          "category": {
+                            "type": "string",
+                            "example": "Masculino"
+                          },
+                          "stage": {
+                            "type": "string",
+                            "example": "1ª Etapa"
+                          }
+                        }
+                      },
+                      "athlete": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "format": "uuid"
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "Marcus Corrêa de Lima"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error!"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Result"],
+        "summary": "Update an existing result",
+        "description": "Update an existing result by Id",
+        "operationId": "updateResult",
+        "parameters": [
+          {
+            "name": "idResult",
+            "in": "path",
+            "description": "Result id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Update a result in the system",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "board": {
+                    "type": "number",
+                    "example": "2"
+                  },
+                  "sort": {
+                    "type": "number",
+                    "example": "1"
+                  },
+                  "scores": {
+                    "type": "boolean",
+                    "example": "true"
+                  },
+                  "idAthlete": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "quantity": {
+                    "type": "number",
+                    "example": "30"
+                  },
+                  "totalWeight": {
+                    "type": "number",
+                    "example": "451"
+                  },
+                  "greaterWeight": {
+                    "type": "number",
+                    "example": "100"
+                  },
+                  "lostPoints": {
+                    "type": "number",
+                    "example": "2"
+                  },
+                  "idChampionship": {
+                    "type": "string",
+                    "format": "uuid"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "board": {
+                      "type": "number",
+                      "example": "2"
+                    },
+                    "sort": {
+                      "type": "number",
+                      "example": "1"
+                    },
+                    "scores": {
+                      "type": "boolean",
+                      "example": "true"
+                    },
+                    "quantity": {
+                      "type": "number",
+                      "example": "30"
+                    },
+                    "totalWeight": {
+                      "type": "number",
+                      "example": "451"
+                    },
+                    "greaterWeight": {
+                      "type": "number",
+                      "example": "100"
+                    },
+                    "points": {
+                      "type": "number",
+                      "example": "43"
+                    },
+                    "lostPoints": {
+                      "type": "number",
+                      "example": "2"
+                    },
+                    "championship": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "format": "uuid"
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "1ª Taça de Vila Velha"
+                        },
+                        "registered": {
+                          "type": "number",
+                          "example": "10"
+                        },
+                        "typeOfChamp": {
+                          "type": "string",
+                          "example": "Pesca"
+                        },
+                        "category": {
+                          "type": "string",
+                          "example": "Masculino"
+                        },
+                        "stage": {
+                          "type": "string",
+                          "example": "1ª Etapa"
+                        }
+                      }
+                    },
+                    "athlete": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "format": "uuid"
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "Marcus Corrêa de Lima"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error!"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Result"],
+        "summary": "Delete an existing result",
+        "description": "Delete an existing result by Id",
+        "operationId": "deleteResult",
+        "parameters": [
+          {
+            "name": "idResult",
+            "in": "path",
+            "description": "Result id",
             "required": true,
             "schema": {
               "type": "string",
@@ -473,66 +1903,6 @@
           "email": {
             "type": "string",
             "example": "loremipsum@gmail.com"
-          }
-        }
-      },
-      "Club": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "name": {
-            "type": "string",
-            "example": "Vila Velha"
-          },
-          "athletes": {
-            "type": "array",
-            "items": { "$ref": "#components/schemas/Athlete" }
-          }
-        }
-      },
-      "RequestClub": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "example": "Vitória"
-          }
-        }
-      },
-      "ResponseClub": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "name": {
-            "type": "string",
-            "example": "Vitória ES"
-          }
-        }
-      },
-      "Athlete": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "name": {
-            "type": "string",
-            "example": "Marcus Corrêa de Lima"
-          },
-          "club": {
-            "type": "string",
-            "example": "Vila Velha"
-          },
-          "results": {
-            "type": "array",
-            "items": { "$ref": "#components/schemas/Result" }
           }
         }
       }
