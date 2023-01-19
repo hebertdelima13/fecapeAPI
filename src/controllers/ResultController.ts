@@ -21,6 +21,7 @@ export class ResultController {
       where: { id: idResult },
       relations: {
         championship: true,
+        athlete: true,
       },
     });
 
