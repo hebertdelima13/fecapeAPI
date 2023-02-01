@@ -16,11 +16,11 @@ export class NewsController {
   async findByIdNews(req: Request, res: Response) {
     const { idNews } = req.params;
 
-    const findNews = await newsRepository.findOneBy({
+    const findNewsById = await newsRepository.findOneBy({
       id: idNews,
     });
 
-    if (!findNews) {
+    if (!findNewsById) {
       throw new BadRequestError("Nenhum id encontrado!");
     }
 
@@ -49,6 +49,8 @@ export class NewsController {
     const result = await cloudinary.v2.uploader.upload(
       (req as MulterRequest).file.path,
       {
+        use_filename: true,
+        unique_filename: false,
         folder: "news",
       }
     );
@@ -57,20 +59,75 @@ export class NewsController {
       title,
       content,
       image: result.secure_url,
+      cloudinary_id: result.public_id,
     });
 
     await newsRepository.save(newNews);
     return res.json(newNews);
   }
 
+  async updateNews(req: Request, res: Response) {
+    const { idNews } = req.params;
+    const findNewsById = await newsRepository.findOneBy({ id: idNews });
+
+    if (!findNewsById) {
+      throw new BadRequestError("Nenhum id encontrado!");
+    }
+
+    const { title, content } = req.body;
+
+    if (!title) {
+      throw new BadRequestError("Digite um título para notícia!");
+    }
+
+    if (!content) {
+      throw new BadRequestError("Digite o conteúdo da notícia!");
+    }
+
+    const findImageName = await cloudinary.v2.api.search(
+      findNewsById.cloudinary_id
+    );
+    const imageName =
+      findImageName.resources[0].filename +
+      "." +
+      findImageName.resources[0].format;
+
+    let result;
+
+    if (imageName !== (req as MulterRequest).file.originalname) {
+      await cloudinary.v2.uploader.destroy(findNewsById.cloudinary_id);
+      result = await cloudinary.v2.uploader.upload(
+        (req as MulterRequest).file.path,
+        {
+          use_filename: true,
+          unique_filename: false,
+          folder: "news",
+        }
+      );
+    }
+
+    const updateNews = {
+      ...findNewsById,
+      title,
+      content,
+      image: result?.secure_url,
+      cloudinary_id: result?.public_id,
+    };
+
+    await newsRepository.save(updateNews);
+    return res.json(updateNews);
+  }
+
   async deleteNews(req: Request, res: Response) {
     const { idNews } = req.params;
 
-    const findNews = await newsRepository.findOneBy({ id: idNews });
+    const findNewsById = await newsRepository.findOneBy({ id: idNews });
 
-    if (!findNews) {
+    if (!findNewsById) {
       throw new BadRequestError("Nenhum id encontrado!");
     }
+
+    await cloudinary.v2.uploader.destroy(findNewsById.cloudinary_id);
 
     await newsRepository.delete(idNews);
     return res.status(204).json({ mensagem: "Notícia deletada com sucesso!" });

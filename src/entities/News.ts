@@ -20,5 +20,8 @@ export class News {
   image: string;
 
   @Column({ type: "text" })
+  cloudinary_id: string;
+
+  @Column({ type: "text" })
   content: string;
 }

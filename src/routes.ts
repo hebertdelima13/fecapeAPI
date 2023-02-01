@@ -69,6 +69,11 @@ routes.delete("/athlete/:idAthlete", new AthleteController().deleteAthlete);
 routes.get("/news", new NewsController().listNews);
 routes.get("/news/:idNews", new NewsController().findByIdNews);
 routes.post("/news", Multer.single("image"), new NewsController().createNews);
+routes.put(
+  "/news/:idNews",
+  Multer.single("image"),
+  new NewsController().updateNews
+);
 routes.delete(
   "/news/:idNews",
   Multer.single("image"),
