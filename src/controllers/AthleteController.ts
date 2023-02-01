@@ -112,7 +112,7 @@ export class AthleteController {
   async deleteAthlete(req: Request, res: Response) {
     const { idAthlete } = req.params;
 
-    const findAthlete = athleteRepository.findOneBy({ id: idAthlete });
+    const findAthlete = await athleteRepository.findOneBy({ id: idAthlete });
 
     if (!findAthlete) {
       throw new BadRequestError("Nenhum id encontrado!");

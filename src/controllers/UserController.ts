@@ -35,6 +35,7 @@ export class UserController {
     const { idUser } = req.params;
 
     const finByIdUser = await userRepository.findOneBy({ id: idUser });
+    const findEmail = await userRepository.findOneBy({ email: email });
 
     if (!finByIdUser) {
       throw new BadRequestError("Nenhum id encontrado!");
@@ -44,8 +45,10 @@ export class UserController {
       throw new BadRequestError("Digite um nome para o usuário!");
     }
 
-    if (!email) {
-      throw new BadRequestError("Digite um e-mail para o usuário!");
+    if (email) {
+      if (findEmail && email != finByIdUser.email) {
+        throw new BadRequestError("E-mail já cadastrado!");
+      }
     }
 
     if (!password) {
@@ -71,7 +74,7 @@ export class UserController {
   async deleteUser(req: Request, res: Response) {
     const { idUser } = req.params;
 
-    const findUser = userRepository.findOneBy({ id: idUser });
+    const findUser = await userRepository.findOneBy({ id: idUser });
 
     if (!findUser) {
       throw new BadRequestError("Nenhum id encontrado!");

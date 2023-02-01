@@ -1,10 +1,14 @@
 import { Router } from "express";
+
+//Controller
 import { ChampionshipController } from "./controllers/ChampionshipController";
 import { ResultController } from "./controllers/ResultController";
 import { ClubController } from "./controllers/ClubController";
 import { AthleteController } from "./controllers/AthleteController";
 import { UserController } from "./controllers/UserController";
 import { AuthController } from "./controllers/AuthController";
+import { NewsController } from "./controllers/NewsController";
+import { Multer } from "./helpers/multer";
 
 const routes = Router();
 
@@ -60,5 +64,15 @@ routes.get("/athlete/:idAthlete", new AthleteController().findByIdAthlete);
 routes.post("/athlete", new AthleteController().createAthlete);
 routes.put("/athlete/:idAthlete", new AthleteController().updateAthlete);
 routes.delete("/athlete/:idAthlete", new AthleteController().deleteAthlete);
+
+/*Users*/
+routes.get("/news", new NewsController().listNews);
+routes.get("/news/:idNews", new NewsController().findByIdNews);
+routes.post("/news", Multer.single("image"), new NewsController().createNews);
+routes.delete(
+  "/news/:idNews",
+  Multer.single("image"),
+  new NewsController().deleteNews
+);
 
 export default routes;

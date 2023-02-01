@@ -3,6 +3,8 @@ import { BadRequestError } from "../helpers/api-errors";
 import { userRepository } from "../repositories/userRepository";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+// import { MulterRequest } from "../@types/multer";
+// import { cloudinary } from "../helpers/cloudinary";
 
 export class AuthController {
   async register(req: Request, res: Response) {
@@ -16,21 +18,33 @@ export class AuthController {
       throw new BadRequestError("Digite um e-mail!");
     }
 
-    if (!password) {
-      throw new BadRequestError("Digite uma senha!");
-    }
-
     const findUser = await userRepository.findOneBy({ email });
 
     if (findUser) {
       throw new BadRequestError("E-mail já cadastrado!");
     }
 
+    if (!password) {
+      throw new BadRequestError("Digite uma senha!");
+    }
+
+    // if (!(req as MulterRequest).file) {
+    //   throw new BadRequestError("Insira uma imagem!");
+    // }
+
     const hashPassword = await bcrypt.hash(password, 10);
 
-    const newUser = await userRepository.create({
+    // const result = await cloudinary.v2.uploader.upload(
+    //   (req as MulterRequest).file.path,
+    //   {
+    //     folder: "avatar",
+    //   }
+    // );
+
+    const newUser = userRepository.create({
       name,
       email,
+      // image: result.secure_url,
       password: hashPassword,
     });
 

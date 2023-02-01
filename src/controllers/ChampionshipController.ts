@@ -138,7 +138,7 @@ export class ChampionshipController {
   async deleteChampionship(req: Request, res: Response) {
     const { idChampionship } = req.params;
 
-    const findChampionship = championshipRepository.findOneBy({
+    const findChampionship = await championshipRepository.findOneBy({
       id: idChampionship,
     });
 

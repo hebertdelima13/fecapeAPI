@@ -88,7 +88,7 @@ export class ClubController {
   async deleteclub(req: Request, res: Response) {
     const { idClub } = req.params;
 
-    const findClub = clubRepository.findOneBy({ id: idClub });
+    const findClub = await clubRepository.findOneBy({ id: idClub });
 
     if (!findClub) {
       throw new BadRequestError("Nenhum id encontrado!");
